@@ -6,6 +6,9 @@
         "port": 27017
     },
     "secretKey": "secretKey",
+    "socket": {
+        
+    },
     "log": {
         "format": "dev",
         "dir": "../logs"

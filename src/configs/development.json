@@ -7,7 +7,7 @@
     },
     "secretKey": "secretKey",
     "socket": {
-        "mec_url": "wss://mec-storage.herokuapp.com"
+        "mec_uri": "wss://mec-storage.herokuapp.com"
     },
     "log": {
         "format": "dev",

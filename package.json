@@ -15,7 +15,6 @@
     "deploy:dev": "pm2 start ecosystem.config.js --only dev"
   },
   "dependencies": {
-    "bcrypt": "^5.0.1",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
     "compression": "^1.7.4",
@@ -43,7 +42,6 @@
     "ws": "^8.2.3"
   },
   "devDependencies": {
-    "@types/bcrypt": "^5.0.0",
     "@types/compression": "^1.7.1",
     "@types/config": "^0.0.39",
     "@types/cookie-parser": "^1.4.2",

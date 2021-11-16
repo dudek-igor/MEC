@@ -1,4 +1,3 @@
-import bcrypt from 'bcrypt';
 import { UpdateProductStockDto } from '@dtos/products.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { Product } from '@interfaces/products.interface';

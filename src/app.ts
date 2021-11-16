@@ -12,16 +12,17 @@ import { connect, set } from 'mongoose';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { dbConnection } from '@databases';
-import { HubSocket } from '@socket';
-import { Routes } from '@interfaces/routes.interface';
+import { SocketServer, HubSocket } from '@socket';
+import { Routes } from '@/interfaces/routes.interface';
 import errorMiddleware from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
-import WebSocket from 'ws';
+import WebSocket, { WebSocketServer } from 'ws';
 
 class App {
   public app: express.Application;
   public port: string | number;
   public env: string;
+  public socket_server: WebSocketServer;
   public ws_hub: WebSocket;
 
   constructor(routes: Routes[]) {
@@ -29,6 +30,7 @@ class App {
     this.port = process.env.PORT || 3000;
     this.env = process.env.NODE_ENV || 'development';
     this.connectToDatabase();
+    this.createSocketServer();
     this.establishSocketConnetions();
     this.initializeMiddlewares();
     this.initializeRoutes(routes);
@@ -54,6 +56,11 @@ class App {
     }
     connect(dbConnection.url, dbConnection.options);
   }
+  //@info Create Socket Server
+  private createSocketServer() {
+    this.socket_server = new SocketServer(config.get('socket.server_port'));
+  }
+
   //@info Establish Socket Connection
   private establishSocketConnetions() {
     const { mec_uri } = config.get('socket');
@@ -82,7 +89,7 @@ class App {
     const options = {
       swaggerDefinition: {
         info: {
-          title: 'REST API',
+          title: 'MEC API',
           version: '1.0.0',
           description: 'MEC docs',
         },
@@ -91,7 +98,7 @@ class App {
     };
 
     const specs = swaggerJSDoc(options);
-    this.app.use('/api/v2/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+    this.app.use('/api/v1/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
   }
   //@info Init Error Handler Middleware
   private initializeErrorHandling() {

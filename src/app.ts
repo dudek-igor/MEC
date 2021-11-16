@@ -9,13 +9,14 @@ import helmet from 'helmet';
 import hpp from 'hpp';
 import morgan from 'morgan';
 import { connect, set } from 'mongoose';
-import WebSocket from 'ws';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { dbConnection } from '@databases';
+import { HubSocket } from '@socket';
 import { Routes } from '@interfaces/routes.interface';
 import errorMiddleware from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
+import WebSocket from 'ws';
 
 class App {
   public app: express.Application;
@@ -28,7 +29,7 @@ class App {
     this.port = process.env.PORT || 3000;
     this.env = process.env.NODE_ENV || 'development';
     // this.connectToDatabase();
-    this.connectToHubViaSocket();
+    this.establishSocketConnetions();
     this.initializeMiddlewares();
     this.initializeRoutes(routes);
     this.initializeSwagger();
@@ -41,7 +42,6 @@ class App {
   //@info Mount App Listen
   public listen() {
     this.app.listen(this.port, () => {
-      logger.info(`=================================`);
       logger.info(`======= ENV: ${this.env} =======`);
       logger.info(`🚀 App listening on the port ${this.port}`);
       logger.info(`=================================`);
@@ -54,16 +54,10 @@ class App {
     }
     connect(dbConnection.url, dbConnection.options);
   }
-  //@info Connect with Hub via socket
-  private connectToHubViaSocket() {
-    this.ws_hub = new WebSocket(config.get('socket.mec_uri'));
-    this.ws_hub.on('open', function open() {
-      // ws.send('something');
-    });
-
-    this.ws_hub.on('message', function message(data) {
-      console.log('received: %s', data);
-    });
+  //@info Establish Socket Connection
+  private establishSocketConnetions() {
+    const { mec_uri } = config.get('socket');
+    this.ws_hub = new HubSocket(mec_uri);
   }
 
   //@info Init middlewares before routes

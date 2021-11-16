@@ -24,6 +24,7 @@
       "@/*": ["*"],
       "@controllers/*": ["controllers/*"],
       "@databases": ["databases"],
+      "@socket": ["socket"],
       "@dtos/*": ["dtos/*"],
       "@exceptions/*": ["exceptions/*"],
       "@interfaces/*": ["interfaces/*"],
@@ -31,7 +32,7 @@
       "@models/*": ["models/*"],
       "@routes/*": ["routes/*"],
       "@services/*": ["services/*"],
-      "@utils/*": ["utils/*"]
+      "@utils/*": ["utils/*"],
     }
   },
   "include": ["src/**/*.ts", "src/**/*.json", ".env"],

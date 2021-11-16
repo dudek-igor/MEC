@@ -9,7 +9,7 @@ import helmet from 'helmet';
 import hpp from 'hpp';
 import morgan from 'morgan';
 import { connect, set } from 'mongoose';
-import { io, Socket } from 'socket.io-client';
+import WebSocket from 'ws';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { dbConnection } from '@databases';
@@ -21,13 +21,13 @@ class App {
   public app: express.Application;
   public port: string | number;
   public env: string;
-  public socket_connection_hub: Socket;
+  public ws_hub: WebSocket;
 
   constructor(routes: Routes[]) {
     this.app = express();
     this.port = process.env.PORT || 3000;
     this.env = process.env.NODE_ENV || 'development';
-    this.connectToDatabase();
+    // this.connectToDatabase();
     this.connectToHubViaSocket();
     this.initializeMiddlewares();
     this.initializeRoutes(routes);
@@ -56,44 +56,14 @@ class App {
   }
   //@info Connect with Hub via socket
   private connectToHubViaSocket() {
-    this.socket_connection_hub = io(config.get('socket.mec_uri'), {
-      // transports: ['websocket'],
-      // transports: ['websocket'], config: [.connectParams(["EIO": "3"])],
-      // maxHttpBufferSize: 1e8,
-      // transports: ['websocket'],
-      // transports: ['websocket', 'polling'],
-      // reconnection: true,
-      // rejectUnauthorized: false,
-      // path: '/socket.io/',
-      // upgrade: true,
-      // rememberUpgrade: true,
-      // withCredentials: true,
-      // rejectUnauthorized: true,
-      // withCredentials: true,
-      // port: '80',
-      // extraHeaders: {
-      //   // Connection: 'Upgrade',
-      //   // 'Sec-WebSocket-Extensions': 'permessage-deflate; client_max_window_bits',
-      //   // 'Sec-WebSocket-Version': '13',
-      //   Upgrade: 'websocket',
+    this.ws_hub = new WebSocket(config.get('socket.mec_uri'));
+    this.ws_hub.on('open', function open() {
+      // ws.send('something');
     });
-    this.socket_connection_hub
-      .on('connect', () => {
-        console.log('Socket connected');
-        // console.log(this.socket_hub.connected); // true
-      })
-      .on('disconnect', () => {
-        console.log('Socket diconnected');
-        // console.log(this.socket_hub.connected); // false
-      })
-      .on('error', () => {
-        console.log('Socket diconnected');
-      })
-      .on('connect_error', error => {
-        console.log('Connection Socket Error');
-        console.log(error);
-        // socket.connect();
-      });
+
+    this.ws_hub.on('message', function message(data) {
+      console.log('received: %s', data);
+    });
   }
 
   //@info Init middlewares before routes

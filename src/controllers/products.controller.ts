@@ -23,6 +23,15 @@ class ProductsController {
       next(error);
     }
   };
+
+  public getHotDeals = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const data: Product[] = await this.productsService.findHotDeals();
+      res.status(200).json({ success: true, error: false, data });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default ProductsController;

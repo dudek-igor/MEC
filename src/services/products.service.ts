@@ -9,15 +9,20 @@ class ProductService {
   public product = productModel;
 
   public async getAllProducts(): Promise<Product[]> {
-    const products: Product[] = await this.product.find().select('-_id').select('-_id -sold');
+    const products: Product[] = await this.product.find().select('-_id -sold_times');
     return products;
   }
 
   public async findProductById(productId: number): Promise<Product> {
     if (isEmpty(productId)) throw new HttpException(400, 'Invalid product id');
-    const productDetails: Product = await this.product.findOne({ productId }).select('-_id -sold');
+    const productDetails: Product = await this.product.findOne({ productId }).select('-_id -sold_times');
     if (!productDetails) throw new HttpException(400, 'Invalid product id');
     return productDetails;
+  }
+
+  public async findHotDeals(): Promise<Product[]> {
+    const products: Product[] = await this.product.find().sort({ sold_times: 1 }).limit(4).select('-_id -sold_times');
+    return products;
   }
 
   public async bulkCreateOrUpdateProducts(products: Product[]): Promise<void> {

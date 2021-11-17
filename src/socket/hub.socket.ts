@@ -29,7 +29,6 @@ class HubSocket extends WebSocket {
         case 'product.stock.updated':
           return await this.productService.productStockUpdated(payload);
         case 'product.stock.decreased':
-          console.log(payload);
           return await this.productService.productStockDecreased(payload);
         case 'product.stock.decrease.failed':
           return console.log('product.stock.decrease.failed');
@@ -41,13 +40,11 @@ class HubSocket extends WebSocket {
     }
   }
   _onerror(event) {
-    console.log(event);
     // logger.error(`[${req.method}] ${req.path} >> StatusCode:: ${status}, Message:: ${message}`);
     logger.error(`Error socket connection in ${this.socket_uri}`);
     this.close();
   }
   _onclose(event) {
-    console.log(event);
     logger.info(`=================================`);
     logger.info(`Socket connection close with ${this.socket_uri}`);
     logger.info(`=================================`);

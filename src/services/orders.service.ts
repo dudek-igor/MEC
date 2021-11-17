@@ -17,7 +17,6 @@ class OrdersService {
   public async saveUserOrders(order): Promise<Order> {
     if (isEmpty(order)) throw new HttpException(400, 'Bad Request');
     const product: Product = await this.product.findOne({ productId: order.productId }).select('name price stock');
-    console.log(product);
     if (isEmpty(product)) throw new HttpException(404, 'Product not found'); //@info One of recruitment task
     if (product.stock < order.quantity) throw new HttpException(400, 'Bad Request'); //@info One of recruitment task
     const orders = await this.order.create({

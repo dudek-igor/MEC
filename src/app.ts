@@ -7,6 +7,7 @@ import config from 'config';
 import express from 'express';
 import helmet from 'helmet';
 import hpp from 'hpp';
+import path from 'path';
 import morgan from 'morgan';
 import { connect, set } from 'mongoose';
 import swaggerJSDoc from 'swagger-jsdoc';
@@ -33,6 +34,7 @@ class App {
     this.createSocketServer();
     this.establishSocketConnetions();
     this.initializeMiddlewares();
+    this.serverReactApp();
     this.initializeRoutes(routes);
     this.initializeSwagger();
     this.initializeErrorHandling();
@@ -77,7 +79,14 @@ class App {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(cookieParser());
+    this.app.use(express.static(`${__dirname}/client/public`));
   }
+  //@info Serve React App
+  private serverReactApp() {
+    //@info Serve React App
+    this.app.use(express.static(path.join(__dirname, 'client', 'public')));
+  }
+
   //@info Mount Routes
   private initializeRoutes(routes: Routes[]) {
     routes.forEach(route => {

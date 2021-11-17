@@ -19,6 +19,8 @@ CMD ["npm", "run", "dev"]
 # Production build stage
 FROM common-build-stage as production-build-stage
 
+RUN npm install --prefix client && npm run build --prefix client
+
 ENV NODE_ENV production
 
 CMD ["npm", "run", "start"]

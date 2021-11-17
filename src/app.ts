@@ -46,7 +46,7 @@ class App {
   //@info Mount App Listen
   public listen() {
     this.app.listen(this.port, () => {
-      logger.info(`======= ENV: ${this.env} =======`);
+      logger.info(`======= ENV: ${this.env} ========`);
       logger.info(`🚀 App listening on the port ${this.port}`);
       logger.info(`=================================`);
     });
@@ -79,18 +79,17 @@ class App {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(cookieParser());
-    this.app.use(express.static(`${__dirname}/client/public`));
   }
   //@info Serve React App
   private serverReactApp() {
     //@info Serve React App
-    this.app.use(express.static(path.join(__dirname, 'client', 'public')));
+    this.app.use(express.static(path.join(__dirname, '../', 'client', 'build')));
   }
 
   //@info Mount Routes
   private initializeRoutes(routes: Routes[]) {
     routes.forEach(route => {
-      this.app.use('/api/v1', route.router);
+      this.app.use('/api/v1/', route.router);
     });
   }
   //@info Init Swagger

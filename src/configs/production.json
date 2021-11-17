@@ -1,11 +1,15 @@
 {
     "env": "production",
     "dbConfig": {
-        "host": "localhost",
+        "host": "mongo",
         "database": "mongoose",
         "port": 27017
     },
     "secretKey": "secretKey",
+    "socket": {
+        "server_port": 8080,
+        "mec_uri": "wss://mec-storage.herokuapp.com"
+    },
     "log": {
         "format": "combined",
         "dir": "../logs"

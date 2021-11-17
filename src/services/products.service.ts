@@ -13,9 +13,9 @@ class ProductService {
   }
 
   public async findProductById(productId: number): Promise<Product> {
-    if (isEmpty(productId)) throw new HttpException(400, 'Invalid product id');
+    if (isEmpty(productId)) throw new HttpException(400, 'Product not found');
     const productDetails: Product = await this.product.findOne({ productId }).select('-_id -sold_times');
-    if (!productDetails) throw new HttpException(400, 'Invalid product id');
+    if (!productDetails) throw new HttpException(400, 'Product not found');
     return productDetails;
   }
 

@@ -1,6 +1,8 @@
 tags:
 - name: Products API
-  description: MEC platform
+  description: MEC Products
+- name: Orders API
+  description: Handle orders on MEC platform
 
 paths:
 # [GET] products
@@ -31,6 +33,46 @@ paths:
           description: 'OK'
         400:
           description: 'Product not found'
+        500:
+          description: 'Server Error'
+# [GET] products/hot-deals
+  /api/v1/products/hot-deals:
+    get:
+      tags:
+      - Products API
+      summary: Get Hot Deals
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+# [GET] orders
+  /api/v1/orders:
+    get:
+      tags:
+      - Orders API
+      summary: Get All User Orders
+      # parameters:
+      # - name: productId
+      #   in: path
+      #   description: Product Id
+      #   required: true
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+    post:
+      tags:
+      - Orders API
+      summary: Confirm Order
+      responses:
+        200:
+          description: 'OK'
+        404:
+          description: 'Product not found'
+        400:
+          description: 'Bad Request'
         500:
           description: 'Server Error'
 

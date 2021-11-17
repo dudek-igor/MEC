@@ -12,8 +12,8 @@ class OrdersRoute implements Routes {
   }
 
   private initializeRoutes() {
-    // this.router.get(`${this.path}`, this.ordersController.getOrderDetails);
-    // this.router.post(`${this.path}`, this.ordersController.confirmOrder);
+    this.router.get(`${this.path}`, this.ordersController.getOrderDetails);
+    this.router.post(`${this.path}`, this.ordersController.confirmOrder);
   }
 }
 

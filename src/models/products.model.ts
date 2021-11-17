@@ -33,6 +33,6 @@ const productSchema: Schema = new Schema(
   },
 );
 
-const articleModel = model<Product & Document>('Product', productSchema);
+const productModel = model<Product & Document>('Product', productSchema);
 
-export default articleModel;
+export default productModel;

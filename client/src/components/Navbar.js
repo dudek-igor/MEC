@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 
 const Navbar = () => {
   return (
-    <AppBar position="relative" color="transparent">
+    <AppBar position="sticky" sx={{backgroundColor: '#ffffff'}}>
       <Toolbar
         sx={{
           display: 'flex',

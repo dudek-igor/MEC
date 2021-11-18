@@ -60,7 +60,7 @@ paths:
           description: 'Server Error'
 # [GET] orders
   /api/v1/orders:
-    get:
+    post:
       tags:
       - Orders API
       summary: Get All User Orders
@@ -74,6 +74,7 @@ paths:
           description: 'OK'
         500:
           description: 'Server Error'
+  /api/v1/orders/confirm:
     post:
       tags:
       - Orders API

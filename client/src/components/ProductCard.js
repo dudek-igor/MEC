@@ -35,7 +35,7 @@ const [orderStock, setOrderStock] = useState(0);
                 <AddIcon />
             </IconButton>
           </ButtonGroup>
-          <Button variant="outlined">Zamów Teraz</Button>
+          <Button disabled={orderStock < 1} variant="outlined">Zamów Teraz</Button>
         </CardActions>
       </Card>
     </Grid>

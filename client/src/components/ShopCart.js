@@ -7,9 +7,12 @@ const ShopCart = () => {
     (async () => {
       try {
         // Get Data
-        // const data = await axios.post('/api/v1/orders');
-        // If ok set user with data
-        // console.log(data);
+        const ordersId = localStorage.getItem('orders')
+        if(ordersId){
+          const data = await axios.post('/api/v1/orders',[]);
+            // If ok set user with data
+          console.log(data);
+        }
       } catch (error) {
         // Handle Error
       }

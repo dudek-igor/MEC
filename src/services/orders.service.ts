@@ -10,7 +10,7 @@ class OrdersService {
   public product = productModel;
 
   public async findAllUserOrders(ordersId): Promise<Order[]> {
-    const orders = await this.order.find({ _id: { $nin: ordersId.map(({ orderId }) => orderId) } });
+    const orders = await this.order.find({ _id: { $in: ordersId.map(({ orderId }) => orderId) } });
     return orders;
   }
 

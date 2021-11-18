@@ -7,42 +7,20 @@ import axios from 'axios';
 const HotDeals = () => {
   const [user, setUser] = useState();
 
-//   useEffect(() => {
-//     // 1. After Component Mount => get User
-//     (async () => {
-//       try {
-//         // Get Data
-//         const {
-//           data: { success, user },
-//         } = await axios.get('/api/v1/user');
-//         // If ok set user with data
-//         if (success) {
-//           setUser(user);
-//         }
-//         // If unauthorize, clear app store/state
-//         else setLogged(false);
-//       } catch (error) {
-//         // If error => logout user
-//         // console.error(error);
-//         setLogged(false);
-//       }
-//     })();
-//     // Only Once
-//     // eslint-disable-next-line react-hooks/exhaustive-deps
-//   }, []);
-
-  // Handle Logout
-//   const handleLogout = async () => {
-//     // Logout => Clear Session in DB & Clear App state
-//     await axios('/api/v1/auth/logout');
-//     setLogged(false);
-//     try {
-//     } catch (error) {
-//       // If something went wrong clear app state
-//       // console.error(error);
-//       setLogged(false);
-//     }
-//   };
+  useEffect(() => {
+    // 1. After Component Mount => get User
+    (async () => {
+      try {
+        // Get Data
+        const data = await axios.get('/api/v1/products/hot-deals');
+        // If ok set user with data
+        console.log(data);
+        
+      } catch (error) {
+       // Handle Error
+      }
+    })();
+  }, []);
 
   return (
     <div> hello hot deals </div>

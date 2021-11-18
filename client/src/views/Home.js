@@ -7,29 +7,20 @@ import axios from 'axios';
 const Home = () => {
   const [user, setUser] = useState();
 
-//   useEffect(() => {
-//     // 1. After Component Mount => get User
-//     (async () => {
-//       try {
-//         // Get Data
-//         const {
-//           data: { success, user },
-//         } = await axios.get('/api/v1/user');
-//         // If ok set user with data
-//         if (success) {
-//           setUser(user);
-//         }
-//         // If unauthorize, clear app store/state
-//         else setLogged(false);
-//       } catch (error) {
-//         // If error => logout user
-//         // console.error(error);
-//         setLogged(false);
-//       }
-//     })();
-//     // Only Once
-//     // eslint-disable-next-line react-hooks/exhaustive-deps
-//   }, []);
+  useEffect(() => {
+    // 1. After Component Mount => get User
+    (async () => {
+      try {
+        // Get Data
+        const data = await axios.get('/api/v1/products');
+        // If ok set user with data
+        console.log(data);
+        
+      } catch (error) {
+       // Handle Error
+      }
+    })();
+  }, []);
 
   // Handle Logout
 //   const handleLogout = async () => {

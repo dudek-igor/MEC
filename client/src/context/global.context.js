@@ -1,39 +1,42 @@
-import React, { createContext, useReducer } from 'react'
+import { createContext, useReducer } from 'react';
 
 //@info Reducer
 const AppReducer = (state, action) => {
   const { payload, type } = action;
+  console.log(payload);
   switch (type) {
-    case 'ADD_TRANSACTION':
+    case 'FETCH_PRODUCTS':
       return {
         ...state,
-        payload
+        products: payload,
+      };
+    case 'FETCH_HOT_DEALS_PRODUCTS':
+      return {
+        ...state,
+        hot_deals_products: payload,
+      };
+    case 'FETCH_ORDERS':
+      return {
+        ...state,
+        orders: payload,
       };
     default:
       return state;
   }
 };
 
-
 //@info Example State
 const initialState = {
-  example: [
-    { id: 1, text: 'Flower' },
-    { id: 2, text: 'Salary' },
-    { id: 3, text: 'Book' },
-    { id: 4, text: 'Camera' },
-  ],
+  products: [],
+  hot_deals_products: [],
+  orders: [],
 };
 
 //@info Create Context
-export const GlobalContext = createContext(initialState);
+export const GlobalContext = createContext();
 
 //@info Provider Component
 export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AppReducer, initialState);
-  return (
-    <GlobalContext.Provider value={(state, dispatch)}>
-      {children}
-    </GlobalContext.Provider>
-  );
+  return <GlobalContext.Provider value={{ state, dispatch }}>{children}</GlobalContext.Provider>;
 };

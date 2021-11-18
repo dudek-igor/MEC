@@ -14,11 +14,13 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import { GlobalContext } from '../context/global.context';
+import { fetchProducts } from '../actions/global.actions';
 
 const ShopCart = () => {
   const [cartOpen, setCartOpen] = useState(false);
   useEffect(() => {
-    // 1. After Component Mount => get User
+ 
     (async () => {
       try {
         // Get Data

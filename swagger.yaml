@@ -3,8 +3,20 @@ tags:
   description: MEC Products
 - name: Orders API
   description: Handle orders on MEC platform
+- name: Index
 
 paths:
+# [GET] index
+  /api/v1/:
+    get:
+      tags:
+      - Index
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
 # [GET] products
   /api/v1/products:
     get:

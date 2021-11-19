@@ -13,18 +13,16 @@ import { connect, set } from 'mongoose';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { dbConnection } from '@databases';
-import { SocketServer, HubSocket } from '@socket';
+import { SocketServer } from '@socket';
 import { Routes } from '@/interfaces/routes.interface';
 import errorMiddleware from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
-import WebSocket, { WebSocketServer } from 'ws';
 
 class App {
   public app: express.Application;
   public port: string | number;
   public env: string;
-  public socket_server: WebSocketServer;
-  public ws_hub: WebSocket;
+  public socket_server: SocketServer;
 
   constructor(routes: Routes[]) {
     this.app = express();
@@ -32,7 +30,6 @@ class App {
     this.env = process.env.NODE_ENV || 'development';
     this.connectToDatabase();
     this.createSocketServer();
-    this.establishSocketConnetions();
     this.initializeMiddlewares();
     this.serverReactApp();
     this.initializeRoutes(routes);
@@ -60,15 +57,8 @@ class App {
   }
   //@info Create Socket Server
   private createSocketServer() {
-    this.socket_server = new SocketServer(config.get('socket.server_port'));
+    this.socket_server = new SocketServer();
   }
-
-  //@info Establish Socket Connection
-  private establishSocketConnetions() {
-    const { mec_uri } = config.get('socket');
-    this.ws_hub = new HubSocket(mec_uri);
-  }
-
   //@info Init middlewares before routes
   private initializeMiddlewares() {
     this.app.use(morgan(config.get('log.format'), { stream }));

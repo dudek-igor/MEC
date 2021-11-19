@@ -3,7 +3,6 @@ import { createContext, useReducer } from 'react';
 //@info Reducer
 const AppReducer = (state, action) => {
   const { payload, type } = action;
-  console.log(payload);
   switch (type) {
     case 'FETCH_PRODUCTS':
       return {
@@ -19,6 +18,11 @@ const AppReducer = (state, action) => {
       return {
         ...state,
         orders: payload,
+      };
+    case 'CONFRIM_ORDERS':
+      return {
+        ...state,
+        orders: [...state.orders, payload],
       };
     default:
       return state;

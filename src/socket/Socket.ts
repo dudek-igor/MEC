@@ -1,19 +1,24 @@
 import WebSocket, { WebSocketServer } from 'ws';
 import ProductService from '@/services/products.service';
+import OrdersService from '@/services/orders.service';
 import { logger } from '@utils/logger';
+import { Order } from '@interfaces/orders.interface';
+import { SocketData } from '@interfaces/socket.interface';
+import { Product } from '@interfaces/products.interface';
 
-class SocketServer {
+class SocketServers {
   public server: WebSocketServer;
-  public hub_client: WebSocket;
+  public hubClient: WebSocket;
   public productService = new ProductService();
+  public orderService = new OrdersService();
 
   constructor() {
     this.server = new WebSocketServer({ port: 8080 });
     this.mountServerListeners();
-    this.hub_client = new WebSocket('wss://mec-storage.herokuapp.com');
+    this.hubClient = new WebSocket('wss://mec-storage.herokuapp.com');
     this.mountHubListeners();
   }
-
+  //@info Mount Server Listeners
   mountServerListeners() {
     this.server.on('connection', ws => {
       logger.info(`=================================`);
@@ -31,32 +36,34 @@ class SocketServer {
       //@warning Cannot subscribe for events from diffrent socket!
     });
   }
-
+  //@info Mount Hub Connection Listeners
   mountHubListeners() {
-    this.hub_client.on('open', () => {
+    this.hubClient.on('open', () => {
       logger.info(`=================================`);
       logger.info(`Establish socket connection with ${'wss://mec-storage.herokuapp.com'}`);
       logger.info(`=================================`);
     });
 
-    this.hub_client.on('message', async message => {
-      const data = JSON.parse(message.toString());
+    this.hubClient.on('message', async message => {
+      const data: SocketData | Product[] = JSON.parse(message.toString());
       if (Array.isArray(data)) {
         await this.productService.bulkCreateOrUpdateProducts(data);
       } else {
-        const { operation, payload } = data;
+        const { operation, correlationId, payload } = data;
         switch (operation) {
           case 'product.stock.updated':
             await this.productService.productStockUpdated(payload);
             break;
           case 'product.stock.decreased':
-            await this.productService.productStockDecreased(payload);
+            const order = await this.orderService.orderConfirmed(correlationId);
+            if (order) {
+              await this.productService.productStockDecreased({ productId: order.productId, ...payload });
+            } else {
+              await this.productService.productStockDecreased(payload);
+            }
             break;
           case 'product.stock.decrease.failed':
-            console.log('product.stock.decrease.failed');
-            break;
-          case 'product.stock.decrease':
-            console.log('product.stock.decrease - zamówienie!!!!');
+            await this.orderService.orderRejected(correlationId);
             break;
           default:
             break;
@@ -70,6 +77,24 @@ class SocketServer {
       }
     });
   }
+  //@info Method for register order in hub
+  registerUserOrderInHub(orderData: Order) {
+    //@info Do not block event loop
+    process.nextTick(() => {
+      this.hubClient.send(
+        Buffer.from(
+          JSON.stringify({
+            operation: 'product.stock.decrease',
+            correlationId: orderData._id, // tutaj powinno znaleźć się wygenerowane przez Ciebie unikalne id
+            payload: {
+              productId: orderData.productId, // id produktu
+              stock: orderData.quantity, // ile sztuk zostało zamówionych
+            },
+          }),
+        ),
+      );
+    });
+  }
 }
 
-export default SocketServer;
+export default SocketServers;

@@ -3,6 +3,6 @@ export interface Order {
   status: string;
   productId: number;
   name: string;
-  price: number;
+  quantity: number;
   sold_price: number;
 }

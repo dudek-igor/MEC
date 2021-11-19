@@ -13,7 +13,7 @@ import { connect, set } from 'mongoose';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { dbConnection } from '@databases';
-import { SocketServer } from '@socket';
+import { SocketServers } from '@socket';
 import { Routes } from '@/interfaces/routes.interface';
 import errorMiddleware from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
@@ -22,7 +22,7 @@ class App {
   public app: express.Application;
   public port: string | number;
   public env: string;
-  public socket_server: SocketServer;
+  public socketServers: SocketServers;
 
   constructor(routes: Routes[]) {
     this.app = express();
@@ -57,7 +57,9 @@ class App {
   }
   //@info Create Socket Server
   private createSocketServer() {
-    this.socket_server = new SocketServer();
+    this.socketServers = new SocketServers();
+    //@info Populate sockets instances
+    this.app.set('socketServers', this.socketServers);
   }
   //@info Init middlewares before routes
   private initializeMiddlewares() {
@@ -72,7 +74,6 @@ class App {
   }
   //@info Serve React App
   private serverReactApp() {
-    //@info Serve React App
     this.app.use(express.static(path.join(__dirname, '../', 'client', 'build')));
   }
 

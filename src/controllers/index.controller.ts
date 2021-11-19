@@ -1,12 +1,8 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 
 class IndexController {
-  public index = (req: Request, res: Response, next: NextFunction) => {
-    try {
-      res.status(200).json({ success: true, error: false, data: 'Hello from MEC' });
-    } catch (error) {
-      next(error);
-    }
+  public index = (req: Request, res: Response) => {
+    res.status(200).json({ success: true, error: false, data: 'Hello from MEC' });
   };
 }
 

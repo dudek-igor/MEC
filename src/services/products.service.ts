@@ -1,6 +1,6 @@
-import { UpdateProductStockDto } from '@dtos/products.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { Product } from '@interfaces/products.interface';
+import { SocketPayload } from '@interfaces/socket.interface';
 import productModel from '@models/products.model';
 import { isEmpty } from '@utils/util';
 
@@ -50,12 +50,12 @@ class ProductService {
     // );
   }
 
-  public async productStockUpdated(product: UpdateProductStockDto): Promise<void> {
+  public async productStockUpdated(product: SocketPayload): Promise<void> {
     await this.product.updateOne({ productId: product.productId }, { stock: product.stock }); // Stock after inventory
     // await this.product.updateOne({ productId }, { $inc: { stock } }); // Or if i should increase stock after inventory
   }
 
-  public async productStockDecreased(product: UpdateProductStockDto): Promise<void> {
+  public async productStockDecreased(product: SocketPayload): Promise<void> {
     await this.product.updateOne({ productId: product.productId }, { stock: product.stock, $inc: { sold_times: 1 } });
   }
 }

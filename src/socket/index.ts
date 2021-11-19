@@ -1,1 +1,1 @@
-export { default as SocketServer } from './Socket';
+export { default as SocketServers } from './Socket';

@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import ProductsController from '@/controllers/products.controller';
 import { Routes } from '@/interfaces/routes.interface';
+import { asyncHandler } from '@/utils/asyncHandler';
 
 class ProductsRoute implements Routes {
   public path = '/products';
@@ -12,9 +13,9 @@ class ProductsRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}/hot-deals`, this.productsController.getHotDeals);
-    this.router.get(`${this.path}/:id`, this.productsController.getProductById);
-    this.router.get(`${this.path}`, this.productsController.getAllProducts);
+    this.router.get(`${this.path}/hot-deals`, asyncHandler(this.productsController.getHotDeals));
+    this.router.get(`${this.path}/:id`, asyncHandler(this.productsController.getProductById));
+    this.router.get(`${this.path}`, asyncHandler(this.productsController.getAllProducts));
   }
 }
 

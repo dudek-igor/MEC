@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { asyncHandler } from '@/utils/asyncHandler';
 import IndexController from '@controllers/index.controller';
 import { Routes } from '@/interfaces/routes.interface';
 
@@ -12,7 +13,7 @@ class IndexRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}`, this.indexController.index);
+    this.router.get(`${this.path}`, asyncHandler(this.indexController.index));
   }
 }
 

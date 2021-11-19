@@ -24,7 +24,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 
-export const WebSocketDemo = () => {
+export const SocketProvider = ({children}) => {
   //Public API that will echo messages sent to it back to the client
   const [socketUrl, setSocketUrl] = useState('wss://echo.websocket.org');
   const [messageHistory, setMessageHistory] = useState([]);
@@ -56,6 +56,8 @@ export const WebSocketDemo = () => {
   }[readyState];
 
   return (
+    <>
+    {children}
     <div>
       <button
         onClick={handleClickChangeSocketUrl}
@@ -75,5 +77,7 @@ export const WebSocketDemo = () => {
           .map((message, idx) => <span key={idx}>{message ? message.data : null}</span>)}
       </ul>
     </div>
+    
+    </>
   );
 };

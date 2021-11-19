@@ -8,7 +8,7 @@ import { fetchProducts } from '../actions/global.actions';
 
 const Home = () => {
   const { state, dispatch } = useContext(GlobalContext);
-  
+
   useEffect(() => {
     fetchProducts(dispatch);
   }, [dispatch]);
@@ -17,8 +17,8 @@ const Home = () => {
     <main>
       <Container sx={{ py: 6 }}>
         <Grid container spacing={4}>
-          {state.products.map(({ productId, ...rest }) => (
-            <ProductCard key={productId} data={rest} />
+          {state.products.map((data) => (
+            <ProductCard key={data.productId} data={data} />
           ))}
         </Grid>
       </Container>

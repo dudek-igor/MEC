@@ -58,7 +58,7 @@ const ShopCart = () => {
           <Divider />
 
           <List sx={{ m: 0 }}>
-            {state.orders.map(({ _id, status, name, quantity, sold_price }, index) => (
+            {state.orders.map(({ _id, status, name, quantity, sold_price: soldPrice }, index) => (
               <ListItem key={_id} sx={{ pt: 0 }}>
                 <ListItemIcon sx={{display:'flex', justifyContent:'center'}}>{status === 'PENDING' ? <HourglassEmptyRoundedIcon /> : <DoneOutlineRoundedIcon />}</ListItemIcon>
                 <ListItemText
@@ -69,7 +69,7 @@ const ShopCart = () => {
                         Status: {status === 'PENDING' ? 'Oczekuje na potwierdzenie' : 'Zamówienie zostało przyjęte'}
                       </Typography>
                       <Typography sx={{ display: 'block' }} component="span" variant="body2" color="text.primary">
-                        Cena: {(sold_price * quantity / 100).toFixed(2)} zł
+                        Cena: {(soldPrice * quantity / 100).toFixed(2)} zł
                       </Typography>
                     </>
                   }

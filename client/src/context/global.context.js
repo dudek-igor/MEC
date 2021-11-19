@@ -9,10 +9,10 @@ const AppReducer = (state, action) => {
         ...state,
         products: payload,
       };
-    case 'FETCH_HOT_DEALS_PRODUCTS':
+    case 'FETCH_hotDealsProducts':
       return {
         ...state,
-        hot_deals_products: payload,
+        hotDealsProducts: payload,
       };
     case 'FETCH_ORDERS':
       return {
@@ -24,6 +24,32 @@ const AppReducer = (state, action) => {
         ...state,
         orders: [...state.orders, payload],
       };
+    // case 'product.stock.decrease': // zamówienie message
+    //   return { ...state, socket: { ...state.socket, payload } };
+    case 'product.stock.decreased': //@info Confirm order and update article stock
+      return {
+        ...state,
+        orders: state.orders.map(({ _id, ...rest }) => (_id === payload.correlationId ? { _id, ...rest, status: 'CONFIRMED' } : { _id, ...rest })),
+        products: state.products.map(({ productId, ...rest }) =>
+          productId === payload.payload.productId ? { productId, ...rest, stock: payload.payload.stock } : { productId, ...rest },
+        ),
+        hotDealsProducts: state.hotDealsProducts.map(({ productId, ...rest }) =>
+          productId === payload.payload.productId ? { productId, ...rest, stock: payload.payload.stock } : { productId, ...rest },
+        ),
+      };
+    case 'product.stock.decrease.failed': // ? kiedy
+      return { ...state };
+    case 'product.stock.updated': //@info Update product stock
+      return {
+        ...state,
+        products: state.products.map(({ productId, ...rest }) =>
+          productId === payload.payload.productId ? { productId, ...rest, stock: payload.payload.stock } : { productId, ...rest },
+        ),
+        hotDealsProducts: state.hotDealsProducts.map(({ productId, ...rest }) =>
+          productId === payload.payload.productId ? { productId, ...rest, stock: payload.payload.stock } : { productId, ...rest },
+        ),
+      };
+
     default:
       return state;
   }
@@ -32,8 +58,9 @@ const AppReducer = (state, action) => {
 //@info Example State
 const initialState = {
   products: [],
-  hot_deals_products: [],
+  hotDealsProducts: [],
   orders: [],
+  socket: {},
 };
 
 //@info Create Context

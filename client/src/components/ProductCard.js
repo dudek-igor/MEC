@@ -28,11 +28,11 @@ const ProductCard = ({ data: { name, price, stock, productId } }) => {
   const [loading, setLoading] = useState(false);
   const { dispatch } = useContext(GlobalContext);
   const handleInputChange = value => {
-    const numeric_pattern = /^\d+$/;
+    const numericPattern = /^\d+$/;
     if (value === '0' || !value) {
       setInputError(null);
       setInputValue(0);
-    } else if (!numeric_pattern.test(value) || value.startsWith('-')) {
+    } else if (!numericPattern.test(value) || value.startsWith('-')) {
       setInputError('Wartość musi być liczbą całkowitą dodatnią');
     } else if (value.startsWith('0')) {
       setInputError("Wartość nie może zaczynać się od '0'");

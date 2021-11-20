@@ -27,7 +27,7 @@ const AppReducer = (state, action) => {
     case 'product.stock.decreased': //@info Confirm order and update article stock
       const order = state.orders.filter(({ _id }) => _id === payload.correlationId);
       if (order.length) {
-        const productIdFromOrder = +order[0].productId; //@info When user create order, Hub do not send back productId
+        const productIdFromOrder = +order[0].productId; //@info When user create order, Hub do not send back productId. Only new stock :(
         return {
           ...state,
           orders: state.orders.map(({ _id, ...rest }) => (_id === payload.correlationId ? { _id, ...rest, status: 'CONFIRMED' } : { _id, ...rest })),

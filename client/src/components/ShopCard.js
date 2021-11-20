@@ -15,6 +15,7 @@ import Typography from '@mui/material/Typography';
 import Badge from '@mui/material/Badge';
 import ShoppingBasketOutlinedIcon from '@mui/icons-material/ShoppingBasketOutlined';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { GlobalContext } from '../context/global.context';
 import { fetchOrders } from '../actions/global.actions';
 
@@ -60,16 +61,29 @@ const ShopCart = () => {
           <List sx={{ m: 0 }}>
             {state.orders.map(({ _id, status, name, quantity, sold_price: soldPrice }, index) => (
               <ListItem key={_id} sx={{ pt: 0 }}>
-                <ListItemIcon sx={{display:'flex', justifyContent:'center'}}>{status === 'PENDING' ? <HourglassEmptyRoundedIcon /> : <DoneOutlineRoundedIcon />}</ListItemIcon>
+                <ListItemIcon sx={{ display: 'flex', justifyContent: 'center' }}>
+                  {status === 'PENDING' ? (
+                    <HourglassEmptyRoundedIcon color="info" />
+                  ) : status === 'REJECTED' ? (
+                    <ErrorOutlineIcon color="error" />
+                  ) : (
+                    <DoneOutlineRoundedIcon color="success" />
+                  )}
+                </ListItemIcon>
                 <ListItemText
                   primary={`${quantity} x ${name.charAt(0).toUpperCase() + name.slice(1)}`}
                   secondary={
                     <>
                       <Typography sx={{ display: 'block' }} component="span" variant="body2" color="text.primary">
-                        Status: {status === 'PENDING' ? 'Oczekuje na potwierdzenie' : 'Zamówienie zostało przyjęte'}
+                        Status:{' '}
+                        {status === 'PENDING'
+                          ? 'Oczekuje na potwierdzenie'
+                          : status === 'REJECTED'
+                          ? 'Zamówienie zostało odrzucone'
+                          : 'Zamówienie zostało przyjęte'}
                       </Typography>
                       <Typography sx={{ display: 'block' }} component="span" variant="body2" color="text.primary">
-                        Cena: {(soldPrice * quantity / 100).toFixed(2)} zł
+                        Cena: {((soldPrice * quantity) / 100).toFixed(2)} zł
                       </Typography>
                     </>
                   }

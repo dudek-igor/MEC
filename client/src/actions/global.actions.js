@@ -69,6 +69,10 @@ export const fetchOrders = async dispatch => {
 export const confirmOrder = async (dispatch, orderStock, productId) => {
   try {
     const { data } = await axios.post('/api/v1/orders/confirm', { productId, quantity: orderStock });
+    dispatch({
+      type: 'CONFRIM_ORDERS',
+      payload: data.data,
+    });
     const ordersIdAsJson = localStorage.getItem('orders');
     if (ordersIdAsJson) {
       const ordersId = JSON.parse(ordersIdAsJson);
@@ -85,10 +89,7 @@ export const confirmOrder = async (dispatch, orderStock, productId) => {
       draggable: true,
       progress: undefined,
     });
-    dispatch({
-      type: 'CONFRIM_ORDERS',
-      payload: data.data,
-    });
+    
     return { success: true, error: false };
   } catch (error) {
     let errorMsg = 'Coś poszło nie tak. Spróbuj ponownie później.';

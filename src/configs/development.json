@@ -7,7 +7,6 @@
     },
     "secretKey": "secretKey",
     "socket": {
-        "server_port": 8080,
         "mec_uri": "wss://mec-storage.herokuapp.com"
     },
     "log": {

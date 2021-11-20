@@ -40,10 +40,11 @@ class AppServer {
     this.createSocketServer();
   }
   //@info getter for app instance
-  public getApp() {
+  get getApp() {
     return this.app;
   }
-  public getServer() {
+  //@info getter for server instance
+  get getServer() {
     return this.server;
   }
   //@info Mount Server Listen

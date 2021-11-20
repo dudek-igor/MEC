@@ -98,6 +98,7 @@ const ShopCart = () => {
           <Button
             variant="contained"
             sx={{
+              zIndex: 1,
               position: 'fixed',
               bottom: 150,
               right: 0,

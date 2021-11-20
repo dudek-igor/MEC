@@ -9,7 +9,7 @@ const AppReducer = (state, action) => {
         ...state,
         products: payload,
       };
-    case 'FETCH_hotDealsProducts':
+    case 'FETCH_HOT_DEALS_PRODUCTS':
       return {
         ...state,
         hotDealsProducts: payload,
@@ -24,21 +24,36 @@ const AppReducer = (state, action) => {
         ...state,
         orders: [...state.orders, payload],
       };
-    // case 'product.stock.decrease': // zamówienie message
-    //   return { ...state, socket: { ...state.socket, payload } };
     case 'product.stock.decreased': //@info Confirm order and update article stock
+      const order = state.orders.filter(({ _id }) => _id === payload.correlationId);
+      if (order.length) {
+        const productIdFromOrder = +order[0].productId; //@info When user create order, Hub do not send back productId
+        return {
+          ...state,
+          orders: state.orders.map(({ _id, ...rest }) => (_id === payload.correlationId ? { _id, ...rest, status: 'CONFIRMED' } : { _id, ...rest })),
+          products: state.products.map(({ productId, ...rest }) =>
+            productId === productIdFromOrder ? { productId, ...rest, stock: payload.payload.stock } : { productId, ...rest },
+          ),
+          hotDealsProducts: state.hotDealsProducts.map(({ productId, ...rest }) =>
+            productId === productIdFromOrder ? { productId, ...rest, stock: payload.payload.stock } : { productId, ...rest },
+          ),
+        };
+      } else {
+        return {
+          ...state,
+          products: state.products.map(({ productId, ...rest }) =>
+            productId === payload.payload.productId ? { productId, ...rest, stock: payload.payload.stock } : { productId, ...rest },
+          ),
+          hotDealsProducts: state.hotDealsProducts.map(({ productId, ...rest }) =>
+            productId === payload.payload.productId ? { productId, ...rest, stock: payload.payload.stock } : { productId, ...rest },
+          ),
+        };
+      }
+    case 'product.stock.decrease.failed':
       return {
         ...state,
-        orders: state.orders.map(({ _id, ...rest }) => (_id === payload.correlationId ? { _id, ...rest, status: 'CONFIRMED' } : { _id, ...rest })),
-        products: state.products.map(({ productId, ...rest }) =>
-          productId === payload.payload.productId ? { productId, ...rest, stock: payload.payload.stock } : { productId, ...rest },
-        ),
-        hotDealsProducts: state.hotDealsProducts.map(({ productId, ...rest }) =>
-          productId === payload.payload.productId ? { productId, ...rest, stock: payload.payload.stock } : { productId, ...rest },
-        ),
+        orders: state.orders.map(({ _id, ...rest }) => (_id === payload.correlationId ? { _id, ...rest, status: 'REJECTED' } : { _id, ...rest })),
       };
-    case 'product.stock.decrease.failed': // ? kiedy
-      return { ...state };
     case 'product.stock.updated': //@info Update product stock
       return {
         ...state,

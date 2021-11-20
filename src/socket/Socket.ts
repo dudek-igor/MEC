@@ -5,22 +5,23 @@ import { logger } from '@utils/logger';
 import { Order } from '@interfaces/orders.interface';
 import { SocketData } from '@interfaces/socket.interface';
 import { Product } from '@interfaces/products.interface';
+import { Server as HTTPServer } from 'http';
 
 class SocketServers {
-  public server: WebSocketServer;
+  public webSocketServer: WebSocketServer;
   public hubClient: WebSocket;
   public productService = new ProductService();
   public orderService = new OrdersService();
 
-  constructor() {
-    this.server = new WebSocketServer({ port: 8080 });
+  constructor(server: HTTPServer) {
+    this.webSocketServer = new WebSocketServer({ server });
     this.mountServerListeners();
     this.hubClient = new WebSocket('wss://mec-storage.herokuapp.com');
     this.mountHubListeners();
   }
   //@info Mount Server Listeners
-  mountServerListeners() {
-    this.server.on('connection', ws => {
+  private mountServerListeners() {
+    this.webSocketServer.on('connection', ws => {
       logger.info(`=================================`);
       logger.info(`New Socket Client Connected`);
       logger.info(`=================================`);
@@ -32,12 +33,15 @@ class SocketServers {
         console.log('jestem w on open ');
         ws.send('something');
       });
-      //   ws.send('Connection');
+      // ws.send('Connection');
+      ws.on('error', error => {
+        console.log(error);
+      });
       //@warning Cannot subscribe for events from diffrent socket!
     });
   }
   //@info Mount Hub Connection Listeners
-  mountHubListeners() {
+  private mountHubListeners() {
     this.hubClient.on('open', () => {
       logger.info(`=================================`);
       logger.info(`Establish socket connection with ${'wss://mec-storage.herokuapp.com'}`);
@@ -69,7 +73,7 @@ class SocketServers {
             break;
         }
         //@info Broadcast event from Hub Socket to client
-        this.server.clients.forEach(client => {
+        this.webSocketServer.clients.forEach(client => {
           if (client.readyState === WebSocket.OPEN) {
             client.send(message.toString());
           }
@@ -78,7 +82,7 @@ class SocketServers {
     });
   }
   //@info Method for register order in hub
-  registerUserOrderInHub(orderData: Order) {
+  public registerUserOrderInHub(orderData: Order) {
     //@info Do not block event loop
     process.nextTick(() => {
       this.hubClient.send(

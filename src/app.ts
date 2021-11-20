@@ -17,9 +17,11 @@ import { SocketServers } from '@socket';
 import { Routes } from '@/interfaces/routes.interface';
 import errorMiddleware from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
+import http, { Server as HTTPServer } from 'http';
 
-class App {
+class AppServer {
   public app: express.Application;
+  public server: HTTPServer;
   public port: string | number;
   public env: string;
   public socketServers: SocketServers;
@@ -28,25 +30,33 @@ class App {
     this.app = express();
     this.port = process.env.PORT || 3000;
     this.env = process.env.NODE_ENV || 'development';
+    this.createServer();
     this.connectToDatabase();
-    this.createSocketServer();
     this.initializeMiddlewares();
-    this.serverReactApp();
+    this.serveReactApp();
     this.initializeRoutes(routes);
     this.initializeSwagger();
     this.initializeErrorHandling();
+    this.createSocketServer();
   }
-  //@info getter for server instance
-  public getServer() {
+  //@info getter for app instance
+  public getApp() {
     return this.app;
   }
-  //@info Mount App Listen
+  public getServer() {
+    return this.server;
+  }
+  //@info Mount Server Listen
   public listen() {
-    this.app.listen(this.port, () => {
+    this.server.listen(this.port, () => {
       logger.info(`======= ENV: ${this.env} ========`);
-      logger.info(`🚀 App listening on the port ${this.port}`);
+      logger.info(`🚀 Server listening on the port ${this.port}`);
       logger.info(`=================================`);
     });
+  }
+  //@info Create HTTP Server
+  private createServer() {
+    this.server = http.createServer(this.app);
   }
   //@info Connect with DB
   private connectToDatabase() {
@@ -57,7 +67,7 @@ class App {
   }
   //@info Create Socket Server
   private createSocketServer() {
-    this.socketServers = new SocketServers();
+    this.socketServers = new SocketServers(this.server);
     //@info Populate sockets instances
     this.app.set('socketServers', this.socketServers);
   }
@@ -73,10 +83,9 @@ class App {
     this.app.use(cookieParser());
   }
   //@info Serve React App
-  private serverReactApp() {
+  private serveReactApp() {
     this.app.use(express.static(path.join(__dirname, '../', 'client', 'build')));
   }
-
   //@info Mount Routes
   private initializeRoutes(routes: Routes[]) {
     routes.forEach(route => {
@@ -105,4 +114,4 @@ class App {
   }
 }
 
-export default App;
+export default AppServer;

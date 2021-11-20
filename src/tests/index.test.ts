@@ -1,5 +1,5 @@
 import request from 'supertest';
-import App from '@/app';
+import AppServer from '@/app';
 import IndexRoute from '@routes/index.route';
 
 afterAll(async () => {
@@ -10,9 +10,9 @@ describe('Testing Index', () => {
   describe('[GET] /', () => {
     it('response statusCode 200', () => {
       const indexRoute = new IndexRoute();
-      const app = new App([indexRoute]);
+      const server = new AppServer([indexRoute]);
 
-      return request(app.getServer()).get(`${indexRoute.path}`).expect(200);
+      return request(server.getServer).get(`${indexRoute.path}`).expect(200);
     });
   });
 });

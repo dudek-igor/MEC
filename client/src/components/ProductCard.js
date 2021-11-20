@@ -49,12 +49,12 @@ const ProductCard = ({ data: { name, price, stock, productId, index } }) => {
     setCartOpen(false);
   };
   const setupOrder = async productId => {
-    setLoading(true);
-    const { success } = await confirmOrder(dispatch, orderStock, productId);
-    if (success) {
+    try {
+      setLoading(true);
+      await confirmOrder(dispatch, orderStock, productId);
       setOrderStock(0);
       setLoading(false);
-    } else {
+    } catch (error) {
       setLoading(false);
     }
   };

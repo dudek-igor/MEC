@@ -89,8 +89,7 @@ export const confirmOrder = async (dispatch, orderStock, productId) => {
       draggable: true,
       progress: undefined,
     });
-    
-    return { success: true, error: false };
+  
   } catch (error) {
     let errorMsg = 'Coś poszło nie tak. Spróbuj ponownie później.';
     if (error.response.status === 404) errorMsg = 'Wybrano błędny produkt';
@@ -104,7 +103,6 @@ export const confirmOrder = async (dispatch, orderStock, productId) => {
       draggable: true,
       progress: undefined,
     });
-    return { success: false, error: true };
   }
 };
 

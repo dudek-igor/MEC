@@ -1,4 +1,5 @@
 import WebSocket, { WebSocketServer } from 'ws';
+import config from 'config';
 import ProductService from '@/services/products.service';
 import OrdersService from '@/services/orders.service';
 import { logger } from '@utils/logger';
@@ -10,33 +11,34 @@ import { Server as HTTPServer } from 'http';
 class SocketServers {
   public webSocketServer: WebSocketServer;
   public hubClient: WebSocket;
+  public hubClinetURI: string;
   public productService = new ProductService();
   public orderService = new OrdersService();
 
   constructor(server: HTTPServer) {
     this.webSocketServer = new WebSocketServer({ server });
     this.mountServerListeners();
-    this.hubClient = new WebSocket('wss://mec-storage.herokuapp.com');
+    this.hubClinetURI = config.get('socket.mec_uri');
+    this.hubClient = new WebSocket(this.hubClinetURI);
     this.mountHubListeners();
   }
   //@info Mount Server Listeners
   private mountServerListeners() {
-    this.webSocketServer.on('connection', ws => {
+    this.webSocketServer.on('connection', () => {
       logger.info(`=================================`);
       logger.info(`New Socket Client Connected`);
       logger.info(`=================================`);
-      ws.on('message', data => {
-        console.log('jestem w message ');
-        console.log('received: %s', data);
-      });
-      ws.on('open', () => {
-        console.log('jestem w on open ');
-        ws.send('something');
-      });
+      //@info Should be handled in normal
+      // ws.on('message', data => {
+      //   console.log('received: %s', data);
+      // });
+      // ws.on('open', () => {
+      //   ws.send('something');
+      // });
       // ws.send('Connection');
-      ws.on('error', error => {
-        console.log(error);
-      });
+      // ws.on('error', error => {
+      //   console.log(error);
+      // });
       //@warning Cannot subscribe for events from diffrent socket!
     });
   }
@@ -44,7 +46,7 @@ class SocketServers {
   private mountHubListeners() {
     this.hubClient.on('open', () => {
       logger.info(`=================================`);
-      logger.info(`Establish socket connection with ${'wss://mec-storage.herokuapp.com'}`);
+      logger.info(`Establish socket connection with ${this.hubClinetURI}`);
       logger.info(`=================================`);
     });
 

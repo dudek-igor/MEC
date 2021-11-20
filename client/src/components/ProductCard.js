@@ -17,10 +17,11 @@ import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import SendIcon from '@mui/icons-material/Send';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import Fade from '@mui/material/Fade';
 import { GlobalContext } from '../context/global.context';
 import { confirmOrder } from '../actions/global.actions';
 
-const ProductCard = ({ data: { name, price, stock, productId } }) => {
+const ProductCard = ({ data: { name, price, stock, productId, index } }) => {
   const [cartOpen, setCartOpen] = useState(false);
   const [inputError, setInputError] = useState(false);
   const [inputValue, setInputValue] = useState(0);
@@ -111,35 +112,37 @@ const ProductCard = ({ data: { name, price, stock, productId } }) => {
           </Paper>
         </Box>
       </Drawer>
-      <Grid item xs={12} sm={6} md={3}>
-        <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', alignContent: 'center' }}>
-          <CardContent sx={{ textAlign: 'center', flexGrow: '1' }}>
-            <Typography gutterBottom variant="h5" component="h2">
-              {name.charAt(0).toUpperCase() + name.slice(1)}
-            </Typography>
-          </CardContent>
-          <CardContent sx={{ textAlign: 'center' }}>
-            <Typography>Dostępność: {stock} sztuk</Typography>
-            <Typography>Cena: {(price / 100).toFixed(2)} zł</Typography>
-          </CardContent>
-          <CardActions sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-            <ButtonGroup>
-              <IconButton sx={{ px: 1 }} size="small" onClick={() => orderStock > 0 && setOrderStock(orderStock - 1)} color="error">
-                <RemoveIcon />
-              </IconButton>
-              <Button onClick={() => setCartOpen(true)} variant="text" sx={{ color: 'black' }}>
-                {orderStock}
+      <Fade in={true} timeout={index * 400}>
+        <Grid item xs={12} sm={6} md={3}>
+          <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', alignContent: 'center' }}>
+            <CardContent sx={{ textAlign: 'center', flexGrow: '1' }}>
+              <Typography gutterBottom variant="h5" component="h2">
+                {name.charAt(0).toUpperCase() + name.slice(1)}
+              </Typography>
+            </CardContent>
+            <CardContent sx={{ textAlign: 'center' }}>
+              <Typography>Dostępność: {stock} sztuk</Typography>
+              <Typography>Cena: {(price / 100).toFixed(2)} zł</Typography>
+            </CardContent>
+            <CardActions sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <ButtonGroup>
+                <IconButton sx={{ px: 1 }} size="small" onClick={() => orderStock > 0 && setOrderStock(orderStock - 1)} color="error">
+                  <RemoveIcon />
+                </IconButton>
+                <Button onClick={() => setCartOpen(true)} variant="text" sx={{ color: 'black' }}>
+                  {orderStock}
+                </Button>
+                <IconButton onClick={() => orderStock <= stock && setOrderStock(orderStock + 1)} color="success">
+                  <AddIcon />
+                </IconButton>
+              </ButtonGroup>
+              <Button onClick={() => setupOrder(productId)} disabled={orderStock < 1 || loading} variant="outlined">
+                {loading ? 'Loading...' : 'Zamów Teraz'}
               </Button>
-              <IconButton onClick={() => orderStock <= stock && setOrderStock(orderStock + 1)} color="success">
-                <AddIcon />
-              </IconButton>
-            </ButtonGroup>
-            <Button onClick={() => setupOrder(productId)} disabled={orderStock < 1 || loading} variant="outlined">
-              {loading ? 'Loading...' : 'Zamów Teraz'}
-            </Button>
-          </CardActions>
-        </Card>
-      </Grid>
+            </CardActions>
+          </Card>
+        </Grid>
+      </Fade>
     </>
   );
 };

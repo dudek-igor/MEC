@@ -17,8 +17,8 @@ const Home = () => {
     <main>
       <Container sx={{ py: 6 }}>
         <Grid container spacing={4}>
-          {state.products.map((data) => (
-            <ProductCard key={data.productId} data={data} />
+          {state.products.map((data,index) => (
+            <ProductCard key={data.productId} data={{...data, index}} />
           ))}
         </Grid>
       </Container>

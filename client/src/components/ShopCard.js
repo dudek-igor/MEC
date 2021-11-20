@@ -18,6 +18,7 @@ import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { GlobalContext } from '../context/global.context';
 import { fetchOrders } from '../actions/global.actions';
+import Slide from '@mui/material/Slide';
 
 const ShopCart = () => {
   const [cartOpen, setCartOpen] = useState(false);
@@ -93,26 +94,27 @@ const ShopCart = () => {
           </List>
         </Box>
       </SwipeableDrawer>
-
-      <Button
-        variant="contained"
-        sx={{
-          position: 'fixed',
-          bottom: 150,
-          right: 0,
-          height: 80,
-          textTransform: 'none',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-around',
-        }}
-        onClick={() => setCartOpen(true)}
-      >
-        <Typography>Zamówienia</Typography>
-        <Badge color="secondary" badgeContent={state.orders?.length}>
-          <ShoppingBasketOutlinedIcon />
-        </Badge>
-      </Button>
+        <Slide direction="left" in={true} timeout={666}>
+          <Button
+            variant="contained"
+            sx={{
+              position: 'fixed',
+              bottom: 150,
+              right: 0,
+              height: 80,
+              textTransform: 'none',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-around',
+            }}
+            onClick={() => setCartOpen(true)}
+          >
+            <Typography>Zamówienia</Typography>
+            <Badge color="secondary" badgeContent={state.orders?.length}>
+              <ShoppingBasketOutlinedIcon />
+            </Badge>
+          </Button>
+        </Slide>
     </>
   );
 };

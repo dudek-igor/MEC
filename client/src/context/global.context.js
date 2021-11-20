@@ -24,6 +24,14 @@ const AppReducer = (state, action) => {
         ...state,
         orders: [...state.orders, payload],
       };
+    case 'SETUP_SOCKET_CONNECTION':
+      return {
+        ...state,
+        socket: {
+          ...state.socket,
+          ...payload,
+        },
+      };
     case 'product.stock.decreased': //@info Confirm order and update article stock
       const order = state.orders.filter(({ _id }) => _id === payload.correlationId);
       if (order.length) {
@@ -75,7 +83,10 @@ const initialState = {
   products: [],
   hotDealsProducts: [],
   orders: [],
-  socket: {},
+  socket: {
+    connectionStatus: 'CONNECTING',
+    readyState: 0
+  },
 };
 
 //@info Create Context

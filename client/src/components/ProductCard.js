@@ -126,13 +126,19 @@ const ProductCard = ({ data: { name, price, stock, productId, index } }) => {
             </CardContent>
             <CardActions sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
               <ButtonGroup>
-                <IconButton sx={{ px: 1 }} size="small" onClick={() => orderStock > 0 && setOrderStock(orderStock - 1)} color="error">
+                <IconButton
+                  disabled={orderStock < 1}
+                  sx={{ px: 1 }}
+                  size="small"
+                  onClick={() => orderStock > 0 && setOrderStock(orderStock - 1)}
+                  color="error"
+                >
                   <RemoveIcon />
                 </IconButton>
                 <Button onClick={() => setCartOpen(true)} variant="text" sx={{ color: 'black' }}>
                   {orderStock}
                 </Button>
-                <IconButton onClick={() => orderStock <= stock && setOrderStock(orderStock + 1)} color="success">
+                <IconButton disabled={orderStock >= stock} onClick={() => orderStock <= stock && setOrderStock(orderStock + 1)} color="success">
                   <AddIcon />
                 </IconButton>
               </ButtonGroup>

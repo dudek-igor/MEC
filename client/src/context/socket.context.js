@@ -8,9 +8,10 @@ export const SocketContext = createContext();
 //@info Create scoket provider
 export const SocketProvider = ({ children }) => {
   const { dispatch } = useContext(GlobalContext);
-  const host = window.location.origin.replace(/^http/, 'ws');
+  const host = window.location.origin.replace(/^https?/, 'ws');
+  // 'ws://localhost:3001'
   const { sendMessage, lastMessage, readyState } = useWebSocket(host, {
-    // Shuld i update data on reconnect!
+    // Obsługa błędów
     onError: error => console.log(error),
     shouldReconnect: closeEvent => {
       return true;

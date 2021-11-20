@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Navbar, ShopCart } from './components';
 import { GlobalProvider } from './context/global.context';
 import { SocketProvider } from './context/socket.context';
-import { Home, HotDeals } from './views';
+import { Home, HotDeals, Error404 } from './views';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -15,7 +15,8 @@ function App() {
           <ShopCart />
           <Routes>
             <Route exact path="/hot-deals" element={<HotDeals />} />
-            <Route path="/" element={<Home />} />
+            <Route exact path="/" element={<Home />} />
+            <Route path="*" element={<Error404 />} />
           </Routes>
         </Router>
         <ToastContainer

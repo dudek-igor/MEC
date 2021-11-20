@@ -32,12 +32,13 @@ class AppServer {
     this.env = process.env.NODE_ENV || 'development';
     this.createServer();
     this.connectToDatabase();
+    this.createSocketServer();
     this.initializeMiddlewares();
     this.serveReactApp();
     this.initializeRoutes(routes);
     this.initializeSwagger();
     this.initializeErrorHandling();
-    this.createSocketServer();
+    this.serveReactAppForUnknowPaths();
   }
   //@info getter for app instance
   get getApp() {
@@ -86,6 +87,12 @@ class AppServer {
   //@info Serve React App
   private serveReactApp() {
     this.app.use(express.static(path.join(__dirname, '../', 'client', 'build')));
+  }
+  //@info Serve React App for any unknown paths
+  private serveReactAppForUnknowPaths() {
+    this.app.get('/*', (req, res) => {
+      res.sendFile(path.join(__dirname, '../', 'client', 'build', 'index.html'));
+    });
   }
   //@info Mount Routes
   private initializeRoutes(routes: Routes[]) {

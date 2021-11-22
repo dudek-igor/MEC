@@ -5,16 +5,14 @@
   "author": "Igor Dudek",
   "license": "ISC",
   "scripts": {
-    "start": "npm run build && cross-env NODE_ENV=production node dist/server.js",
-    "dev": "cross-env NODE_ENV=development nodemon -L",
+    "start": "cross-env NODE_ENV=production node dist/server.js",
+    "dev": "cross-env NODE_ENV=development PORT=3001 nodemon -L",
+    "dev:client": "cross-env NODE_ENV=development npm start --prefix client",
     "build": "tsc && npx tsc-alias",
-    "build:client": "npm install --prefix client && npm run build --prefix client",
     "test": "jest --forceExit --detectOpenHandles",
     "lint": "eslint --ignore-path .gitignore --ext .ts src/",
     "lint:fix": "npm run lint -- --fix",
-    "deploy:prod": "npm run build && pm2 start ecosystem.config.js --only prod",
-    "deploy:dev": "pm2 start ecosystem.config.js --only dev",
-    "docker:dev": "docker-compose up -d && docker-compose logs -f server"
+    "docker": "docker-compose rm -f && docker-compose pull && docker-compose up --build -d && docker-compose up --force-recreate -d && docker-compose logs -f serwer"
   },
   "dependencies": {
     "class-transformer": "^0.4.0",

@@ -8,7 +8,7 @@ export const SocketContext = createContext();
 //@info Create scoket provider
 export const SocketProvider = ({ children }) => {
   const { dispatch } = useContext(GlobalContext);
-  const host = window.location.origin.replace(/^https?/, 'ws');
+  const host = window.location.origin.startsWith('https') ?  window.location.origin.replace(/^https/, 'wss') : window.location.origin.replace(/^https?/, 'ws');
   // 'ws://localhost:3001'
   const { sendMessage, lastMessage, readyState } = useWebSocket(host, {
     // Obsługa błędów

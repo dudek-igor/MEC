@@ -46,8 +46,10 @@ export const fetchOrders = async dispatch => {
   try {
     const ordersIdAsJson = localStorage.getItem('orders');
     if (ordersIdAsJson) {
-      const ordersId = JSON.parse(ordersIdAsJson);
-      const { data } = await axios.post('/api/v1/orders', ordersId);
+      const parsed_orders = JSON.parse(ordersIdAsJson);
+      const { data } = await axios.post('/api/v1/orders', {
+        ordersId: parsed_orders.map(({ orderId }) => orderId),
+      });
       dispatch({
         type: 'FETCH_ORDERS',
         payload: data.data,
@@ -89,7 +91,6 @@ export const confirmOrder = async (dispatch, orderStock, productId) => {
       draggable: true,
       progress: undefined,
     });
-  
   } catch (error) {
     let errorMsg = 'Coś poszło nie tak. Spróbuj ponownie później.';
     if (error.response.status === 404) errorMsg = 'Wybrano błędny produkt';

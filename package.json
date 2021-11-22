@@ -6,6 +6,7 @@
   "license": "ISC",
   "scripts": {
     "start": "cross-env NODE_ENV=production node dist/server.js",
+    "doc": "npm install --prefix client && npm run build --prefix client && tsc && npx tsc-alias && cross-env NODE_ENV=production node ./dist/server.js",
     "dev": "cross-env NODE_ENV=development PORT=3001 nodemon -L",
     "dev:client": "cross-env NODE_ENV=development npm start --prefix client",
     "build": "tsc && npx tsc-alias",

@@ -7,7 +7,7 @@ COPY . ./app
 
 WORKDIR /app
 
-RUN npm install
+RUN npm install && npm install typescript -g
 
 EXPOSE 3000
 
@@ -18,11 +18,9 @@ ENV NODE_ENV production
 
 ENV DOCKER_COMPOSE true
 
-RUN npm install --prefix client && npm run build --prefix client
+ENV PORT 3000
 
-RUN npm run build
-
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "doc"]
 
 # Development build stage
 FROM common-build-stage as development-build-stage

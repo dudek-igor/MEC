@@ -1,21 +1,23 @@
 ## #MEC Platform
 
-[Heroku](https://radiant-lowlands-54648.herokuapp.com/)
+[Heroku](https://radiant-lowlands-54648.herokuapp.com/) 
+
+- Frontend - CRA / JavaScript
+- Backend - Express + MongoDB / TypeScript
 
 ---
 
-## System management brain
-
-# Tutorial
+## Tutorial
 
 #### Requirements
 
+- git
 - docker
 
-#### Run app in prod mode via docker-compose
+#### Run app localy via docker-compose
 
-- `npm run docker`
-
-#### Run app in dev mode 
-
-1. 
+1. clone repo - `git clone https://github.com/dudek-igor/MEC.git`
+2. change directory - `cd MEC`
+3. Stop all your containers
+4. type - `npm run docker`
+5. Enjoy :)

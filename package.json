@@ -13,7 +13,7 @@
     "test": "jest --forceExit --detectOpenHandles",
     "lint": "eslint --ignore-path .gitignore --ext .ts src/",
     "lint:fix": "npm run lint -- --fix",
-    "docker": "docker-compose rm -f && docker-compose pull && docker-compose up --build -d && docker-compose up --force-recreate -d && docker-compose logs -f serwer"
+    "docker": "docker-compose up -d && docker-compose logs -f serwer"
   },
   "dependencies": {
     "class-transformer": "^0.4.0",

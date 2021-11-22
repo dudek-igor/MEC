@@ -7,8 +7,8 @@ import { SocketServers } from '@/socket';
 class OrdersController {
   public ordersService = new OrderService();
 
-  public getOrderDetails = async (req: Request, res: Response) => {
-    const orders: findAllUserOrdersDto[] = req.body;
+  public getOrdersDetails = async (req: Request, res: Response) => {
+    const orders: findAllUserOrdersDto = req.body;
     const data: Order[] = await this.ordersService.findAllUserOrders(orders);
     res.status(200).json({ success: true, error: false, data });
   };

@@ -61,7 +61,7 @@ class AppServer {
     this.server = http.createServer(this.app);
   }
   //@info Connect with DB
-  private connectToDatabase() {
+  private async connectToDatabase() {
     if (this.env !== 'production') {
       set('debug', true);
     }

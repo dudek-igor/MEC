@@ -1,12 +1,14 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsNumber, IsString, IsArray } from 'class-validator';
 
 export class findAllUserOrdersDto {
-  @IsString()
-  public orderId: string;
+  @IsArray()
+  @IsString({ each: true })
+  ordersId: string[];
 }
 
 export class ConfirmOrderDto {
   @IsNumber()
-  public productId: string;
+  public productId: number;
+  @IsNumber()
   public quantity: number;
 }
